@@ -12,30 +12,30 @@ import static java.util.stream.Collectors.*;
 public class PivotReportServiceImpl implements PivotReportService {
 
     public Set<PivotReportResultRow> getReport(Collection<CallActivity> inputList) {
-        List<CallActivity> filtered = inputList.stream()
+        List<CallActivity> filtered = inputList.parallelStream()
                 .filter(c -> c.getCalledIsTargets().length > 0 || c.getCallerIsTargets().length > 0)
                 .collect(toList());
 //        List<CallActivity> distincted = filtered.stream().distinct().collect(toList());
-        List<CallActivity> distincted = filtered.stream()
+        List<CallActivity> distincted = filtered.parallelStream()
                 .collect(groupingBy(c -> new CallerCalledCallDateKey(c.getCallerMsisdn(), c.getCalledMsisdn(), c.getCallDate()), toSet()))
-                .entrySet().stream().map(e -> e.getValue().stream().findFirst().get()).collect(toList());
-        Map<CallerCalledKey, Long> masterCountingGroup = distincted.stream()
+                .entrySet().parallelStream().map(e -> e.getValue().parallelStream().findFirst().get()).collect(toList());
+        Map<CallerCalledKey, Long> masterCountingGroup = distincted.parallelStream()
                 .collect(groupingBy(c -> new CallerCalledKey(c.getCallerMsisdn(), c.getCalledMsisdn()), counting()));
         Set<PivotReportResultRow> masterPivotTable = getMasterPivotTable(filtered, masterCountingGroup);
-        Map<CallerCalledSourceKey, Long> pivotCountingGroup = filtered.stream()
+        Map<CallerCalledSourceKey, Long> pivotCountingGroup = filtered.parallelStream()
                 .collect(groupingBy(c -> new CallerCalledSourceKey(c.getCallerMsisdn(), c.getCalledMsisdn(), c.getSource()), counting()));
-//        Set<String> sources = pivotCountingGroup.keySet().stream().map(k -> k.getSource()).distinct().collect(toSet());
+//        Set<String> sources = pivotCountingGroup.keySet().parallelStream().map(k -> k.getSource()).distinct().collect(toSet());
         mergeResults(masterPivotTable, pivotCountingGroup);
         return masterPivotTable;
     }
 
     private Set<PivotReportResultRow> getMasterPivotTable(Collection<CallActivity> callActivities, Map<CallerCalledKey, Long> masterCountingGroup) {
-        Map<CallerCalledKey, Set<CallActivity>> masterPivotTable = callActivities.stream()
+        Map<CallerCalledKey, Set<CallActivity>> masterPivotTable = callActivities.parallelStream()
                 .collect(groupingBy(c -> new CallerCalledKey(c.getCallerMsisdn(), c.getCalledMsisdn()), toSet()));
-        return masterPivotTable.entrySet().stream().map(e -> {
+        return masterPivotTable.entrySet().parallelStream().map(e -> {
             CallerCalledKey key = e.getKey();
-            Optional<CallActivity> callActivity = e.getValue().stream().findFirst();
-            Optional<Map.Entry<CallerCalledKey, Long>> countEntry = masterCountingGroup.entrySet().stream().filter(e2 -> {
+            Optional<CallActivity> callActivity = e.getValue().parallelStream().findFirst();
+            Optional<Map.Entry<CallerCalledKey, Long>> countEntry = masterCountingGroup.entrySet().parallelStream().filter(e2 -> {
                 CallerCalledKey matchingKey = new CallerCalledKey(e2.getKey().getCaller(), e2.getKey().getCalled());
                 return matchingKey.equals(key);
             }).findFirst();
@@ -56,9 +56,9 @@ public class PivotReportServiceImpl implements PivotReportService {
     }
 
     private void mergeResults(Set<PivotReportResultRow> masterPivotTable, Map<CallerCalledSourceKey, Long> pivotCountingGroup) {
-        pivotCountingGroup.entrySet().stream().forEach(e -> {
+        pivotCountingGroup.entrySet().parallelStream().forEach(e -> {
             CallerCalledSourceKey callerCalledSourceKey = e.getKey();
-            Optional<PivotReportResultRow> matchingRow = masterPivotTable.stream()
+            Optional<PivotReportResultRow> matchingRow = masterPivotTable.parallelStream()
                     .filter(r -> r.getCallerMsisdn() != null && r.getCalledMsisdn() != null
                             && r.getCalledMsisdn().equals(callerCalledSourceKey.getCalled())
                             && r.getCallerMsisdn().equals(callerCalledSourceKey.getCaller()))
