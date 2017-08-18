@@ -1,0 +1,45 @@
+[
+  {
+    "callerMsisdn": "1",
+    "callerIsTargets": [
+      "Jack",
+      "Steven"
+    ],
+    "calledMsisdn": "2",
+    "calledIsTargets": [],
+    "source": "mcng-A",
+    "duration": 10
+  },
+  {
+    "callerMsisdn": "1",
+    "callerIsTargets": [
+      "Jack",
+      "Steven"
+    ],
+    "calledMsisdn": "2",
+    "calledIsTargets": [],
+    "source": "mcng-B",
+    "duration": 10
+  },
+  {
+    "callerMsisdn": "3",
+    "callerIsTargets": [
+      "Audrey"
+    ],
+    "calledMsisdn": "4",
+    "calledIsTargets": [
+      "Andrew",
+      "Daniel"
+    ],
+    "source": "mcng-A",
+    "duration": 11
+  },
+  {
+    "callerMsisdn": "10",
+    "callerIsTargets": [],
+    "calledMsisdn": "11",
+    "calledIsTargets": [],
+    "source": "mcng-A",
+    "duration": 11
+  }
+]
