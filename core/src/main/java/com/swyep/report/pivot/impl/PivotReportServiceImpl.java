@@ -15,7 +15,8 @@ public class PivotReportServiceImpl implements PivotReportService {
         List<CallActivity> filtered = inputList.stream()
                 .filter(c -> c.getCalledIsTargets().length > 0 || c.getCallerIsTargets().length > 0)
                 .collect(toList());
-        Map<CallerCalledKey, Long> masterCountingGroup = filtered.stream().distinct()
+        List<CallActivity> distincted = filtered.stream().distinct().collect(toList());
+        Map<CallerCalledKey, Long> masterCountingGroup = distincted.stream()
                 .collect(groupingBy(c -> new CallerCalledKey(c.getCallerMsisdn(), c.getCalledMsisdn()), counting()));
         Set<PivotReportResultRow> masterPivotTable = getMasterPivotTable(filtered, masterCountingGroup);
         Map<CallerCalledSourceKey, Long> pivotCountingGroup = filtered.stream()

@@ -83,24 +83,13 @@ public class CallActivity {
 
         if (getCallerMsisdn() != null ? !getCallerMsisdn().equals(that.getCallerMsisdn()) : that.getCallerMsisdn() != null)
             return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        if (!Arrays.equals(getCallerIsTargets(), that.getCallerIsTargets())) return false;
-        if (getCalledMsisdn() != null ? !getCalledMsisdn().equals(that.getCalledMsisdn()) : that.getCalledMsisdn() != null)
-            return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        if (!Arrays.equals(getCalledIsTargets(), that.getCalledIsTargets())) return false;
-        if (getSource() != null ? !getSource().equals(that.getSource()) : that.getSource() != null) return false;
-        return getDuration() != null ? getDuration().equals(that.getDuration()) : that.getDuration() == null;
+        return getCalledMsisdn() != null ? getCalledMsisdn().equals(that.getCalledMsisdn()) : that.getCalledMsisdn() == null;
     }
 
     @Override
     public int hashCode() {
         int result = getCallerMsisdn() != null ? getCallerMsisdn().hashCode() : 0;
-        result = 31 * result + Arrays.hashCode(getCallerIsTargets());
         result = 31 * result + (getCalledMsisdn() != null ? getCalledMsisdn().hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(getCalledIsTargets());
-        result = 31 * result + (getSource() != null ? getSource().hashCode() : 0);
-        result = 31 * result + (getDuration() != null ? getDuration().hashCode() : 0);
         return result;
     }
 }
