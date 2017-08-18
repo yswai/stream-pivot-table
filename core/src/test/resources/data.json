@@ -41,5 +41,26 @@
     "calledIsTargets": [],
     "source": "mcng-A",
     "duration": 11
+  },
+  {
+    "callerMsisdn": "21",
+    "callerIsTargets": [
+      "Michelle",
+      "Steven"
+    ],
+    "calledMsisdn": "22",
+    "calledIsTargets": [],
+    "source": "mcng-A",
+    "duration": 10
+  },
+  {
+    "callerMsisdn": "31",
+    "callerIsTargets": [],
+    "calledMsisdn": "32",
+    "calledIsTargets": [
+      "Roy"
+    ],
+    "source": "mcng-A",
+    "duration": 10
   }
 ]
