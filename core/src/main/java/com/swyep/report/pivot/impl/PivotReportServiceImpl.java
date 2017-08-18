@@ -20,7 +20,8 @@ public class PivotReportServiceImpl implements PivotReportService {
         Set<PivotReportResultRow> masterPivotTable = getMasterPivotTable(filtered, masterCountingGroup);
         Map<CallerCalledSourceKey, Long> pivotCountingGroup = filtered.stream()
                 .collect(groupingBy(c -> new CallerCalledSourceKey(c.getCallerMsisdn(), c.getCalledMsisdn(), c.getSource()), counting()));
-        Set<String> sources = pivotCountingGroup.keySet().stream().map(k -> k.getSource()).distinct().collect(toSet());
+//        Set<String> sources = pivotCountingGroup.keySet().stream().map(k -> k.getSource()).distinct().collect(toSet());
+        mergeResults(masterPivotTable, pivotCountingGroup);
         return masterPivotTable;
     }
 
