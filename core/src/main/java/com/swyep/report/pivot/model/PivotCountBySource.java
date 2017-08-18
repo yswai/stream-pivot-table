@@ -7,6 +7,9 @@ public class PivotCountBySource {
     private String source;
     private Long count;
 
+    public PivotCountBySource() {
+    }
+
     public PivotCountBySource(String source, Long count) {
         this.source = source;
         this.count = count;

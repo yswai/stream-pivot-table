@@ -2,6 +2,7 @@ package com.swyep.report.pivot.impl;
 
 import com.swyep.report.pivot.PivotReportService;
 import com.swyep.report.pivot.model.CallActivity;
+import com.swyep.report.pivot.model.PivotCountBySource;
 import com.swyep.report.pivot.model.PivotReportResultRow;
 
 import java.util.*;
@@ -50,7 +51,19 @@ public class PivotReportServiceImpl implements PivotReportService {
     }
 
     private void mergeResults(Set<PivotReportResultRow> masterPivotTable, Map<CallerCalledSourceKey, Long> pivotCountingGroup) {
-
+        pivotCountingGroup.entrySet().stream().forEach(e -> {
+            CallerCalledSourceKey callerCalledSourceKey = e.getKey();
+            Optional<PivotReportResultRow> matchingRow = masterPivotTable.stream()
+                    .filter(r -> r.getCalledMsisdn().equals(callerCalledSourceKey.getCalled())
+                            && r.getCallerMsisdn().equals(callerCalledSourceKey.getCaller()))
+                    .findFirst();
+            matchingRow.ifPresent(m -> {
+                PivotCountBySource pivotCountBySource = new PivotCountBySource();
+                pivotCountBySource.setSource(callerCalledSourceKey.getSource());
+                pivotCountBySource.setCount(e.getValue());
+                m.getPivotCountBySources().add(pivotCountBySource);
+            });
+        });
     }
 
     private static final class CallerCalledKey {

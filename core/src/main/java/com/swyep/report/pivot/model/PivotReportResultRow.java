@@ -1,12 +1,14 @@
 package com.swyep.report.pivot.model;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.SortedSet;
 
 /**
  * Created by ysw on 8/18/2017.
  */
 public class PivotReportResultRow extends CallActivity {
-    private SortedSet<PivotCountBySource> pivotCountBySources;
+    private Set<PivotCountBySource> pivotCountBySources = Collections.emptySet();
     private Long distinctCount;
 
     public PivotReportResultRow() {
@@ -18,11 +20,11 @@ public class PivotReportResultRow extends CallActivity {
         this.distinctCount = distinctCount;
     }
 
-    public SortedSet<PivotCountBySource> getPivotCountBySources() {
+    public Set<PivotCountBySource> getPivotCountBySources() {
         return pivotCountBySources;
     }
 
-    public void setPivotCountBySources(SortedSet<PivotCountBySource> pivotCountBySources) {
+    public void setPivotCountBySources(Set<PivotCountBySource> pivotCountBySources) {
         this.pivotCountBySources = pivotCountBySources;
     }
 
