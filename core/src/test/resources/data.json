@@ -51,7 +51,20 @@
     "calledMsisdn": "22",
     "calledIsTargets": [],
     "source": "mcng-A",
-    "duration": 10
+    "duration": 12,
+    "callDate": 1500386615000
+  },
+  {
+    "callerMsisdn": "21",
+    "callerIsTargets": [
+      "Michelle",
+      "Steven"
+    ],
+    "calledMsisdn": "22",
+    "calledIsTargets": [],
+    "source": "mcng-A",
+    "duration": 12,
+    "callDate": 1503065015000
   },
   {
     "callerMsisdn": "31",

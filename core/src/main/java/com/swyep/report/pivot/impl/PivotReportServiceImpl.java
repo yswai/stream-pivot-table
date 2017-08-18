@@ -15,7 +15,10 @@ public class PivotReportServiceImpl implements PivotReportService {
         List<CallActivity> filtered = inputList.stream()
                 .filter(c -> c.getCalledIsTargets().length > 0 || c.getCallerIsTargets().length > 0)
                 .collect(toList());
-        List<CallActivity> distincted = filtered.stream().distinct().collect(toList());
+//        List<CallActivity> distincted = filtered.stream().distinct().collect(toList());
+        List<CallActivity> distincted = filtered.stream()
+                .collect(groupingBy(c -> new CallerCalledCallDateKey(c.getCallerMsisdn(), c.getCalledMsisdn(), c.getCallDate()), toSet()))
+                .entrySet().stream().map(e -> e.getValue().stream().findFirst().get()).collect(toList());
         Map<CallerCalledKey, Long> masterCountingGroup = distincted.stream()
                 .collect(groupingBy(c -> new CallerCalledKey(c.getCallerMsisdn(), c.getCalledMsisdn()), counting()));
         Set<PivotReportResultRow> masterPivotTable = getMasterPivotTable(filtered, masterCountingGroup);
@@ -160,4 +163,48 @@ public class PivotReportServiceImpl implements PivotReportService {
             return result;
         }
     }
+
+    private static final class CallerCalledCallDateKey {
+        private String caller;
+        private String called;
+        private Date callDate;
+
+        public CallerCalledCallDateKey() {
+        }
+
+        public CallerCalledCallDateKey(String caller, String called, Date callDate) {
+            this.caller = caller;
+            this.called = called;
+            this.callDate = callDate;
+        }
+
+        public String getCaller() {
+            return caller;
+        }
+
+        public String getCalled() {
+            return called;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            CallerCalledCallDateKey that = (CallerCalledCallDateKey) o;
+
+            if (getCaller() != null ? !getCaller().equals(that.getCaller()) : that.getCaller() != null) return false;
+            if (getCalled() != null ? !getCalled().equals(that.getCalled()) : that.getCalled() != null) return false;
+            return callDate != null ? callDate.equals(that.callDate) : that.callDate == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = getCaller() != null ? getCaller().hashCode() : 0;
+            result = 31 * result + (getCalled() != null ? getCalled().hashCode() : 0);
+            result = 31 * result + (callDate != null ? callDate.hashCode() : 0);
+            return result;
+        }
+    }
+
 }

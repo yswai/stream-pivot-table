@@ -14,12 +14,6 @@ public class PivotReportResultRow extends CallActivity {
     public PivotReportResultRow() {
     }
 
-    public PivotReportResultRow(String callerMsisdn, String[] callerIsTargets, String calledMsisdn, String[] calledIsTargets, String source, Long duration, SortedSet<PivotCountBySource> pivotCountBySources, Long distinctCount) {
-        super(callerMsisdn, callerIsTargets, calledMsisdn, calledIsTargets, source, duration);
-        this.pivotCountBySources = pivotCountBySources;
-        this.distinctCount = distinctCount;
-    }
-
     public Set<PivotCountBySource> getPivotCountBySources() {
         return pivotCountBySources;
     }

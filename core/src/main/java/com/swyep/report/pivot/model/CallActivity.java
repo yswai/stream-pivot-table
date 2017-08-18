@@ -1,6 +1,6 @@
 package com.swyep.report.pivot.model;
 
-import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Created by ysw on 8/18/2017.
@@ -13,17 +13,19 @@ public class CallActivity {
     private String[] calledIsTargets = new String[] {};
     private String source;
     private Long duration;
+    private Date callDate = new Date();
 
     public CallActivity() {
     }
 
-    public CallActivity(String callerMsisdn, String[] callerIsTargets, String calledMsisdn, String[] calledIsTargets, String source, Long duration) {
+    public CallActivity(String callerMsisdn, String[] callerIsTargets, String calledMsisdn, String[] calledIsTargets, String source, Long duration, Date callDate) {
         this.callerMsisdn = callerMsisdn;
         this.callerIsTargets = callerIsTargets;
         this.calledMsisdn = calledMsisdn;
         this.calledIsTargets = calledIsTargets;
         this.source = source;
         this.duration = duration;
+        this.callDate = callDate;
     }
 
     public String getCallerMsisdn() {
@@ -74,6 +76,14 @@ public class CallActivity {
         this.calledIsTargets = calledIsTargets;
     }
 
+    public Date getCallDate() {
+        return callDate;
+    }
+
+    public void setCallDate(Date callDate) {
+        this.callDate = callDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,13 +93,19 @@ public class CallActivity {
 
         if (getCallerMsisdn() != null ? !getCallerMsisdn().equals(that.getCallerMsisdn()) : that.getCallerMsisdn() != null)
             return false;
-        return getCalledMsisdn() != null ? getCalledMsisdn().equals(that.getCalledMsisdn()) : that.getCalledMsisdn() == null;
+        if (getCalledMsisdn() != null ? !getCalledMsisdn().equals(that.getCalledMsisdn()) : that.getCalledMsisdn() != null)
+            return false;
+        if (getDuration() != null ? !getDuration().equals(that.getDuration()) : that.getDuration() != null)
+            return false;
+        return getCallDate() != null ? getCallDate().equals(that.getCallDate()) : that.getCallDate() == null;
     }
 
     @Override
     public int hashCode() {
         int result = getCallerMsisdn() != null ? getCallerMsisdn().hashCode() : 0;
         result = 31 * result + (getCalledMsisdn() != null ? getCalledMsisdn().hashCode() : 0);
+        result = 31 * result + (getDuration() != null ? getDuration().hashCode() : 0);
+        result = 31 * result + (getCallDate() != null ? getCallDate().hashCode() : 0);
         return result;
     }
 }
