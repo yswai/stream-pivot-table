@@ -8,7 +8,8 @@
     "calledMsisdn": "2",
     "calledIsTargets": [],
     "source": "mcng-A",
-    "duration": 10
+    "duration": 10,
+    "callDate": 1500386615000
   },
   {
     "callerMsisdn": "1",
@@ -19,7 +20,8 @@
     "calledMsisdn": "2",
     "calledIsTargets": [],
     "source": "mcng-B",
-    "duration": 10
+    "duration": 10,
+    "callDate": 1500386615000
   },
   {
     "callerMsisdn": "3",
