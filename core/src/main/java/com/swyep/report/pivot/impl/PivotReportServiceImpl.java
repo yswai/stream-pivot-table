@@ -39,7 +39,7 @@ public class PivotReportServiceImpl implements PivotReportService {
             String caller = key.getCaller();
             String called = key.getCalled();
             PivotReportResultRow pivotReportResultRow = new PivotReportResultRow();
-            pivotReportResultRow.setCalledMsisdn(caller);
+            pivotReportResultRow.setCallerMsisdn(caller);
             pivotReportResultRow.setCalledMsisdn(called);
             callActivity.ifPresent(c -> {
                 pivotReportResultRow.setSource(c.getSource());
@@ -55,7 +55,8 @@ public class PivotReportServiceImpl implements PivotReportService {
         pivotCountingGroup.entrySet().stream().forEach(e -> {
             CallerCalledSourceKey callerCalledSourceKey = e.getKey();
             Optional<PivotReportResultRow> matchingRow = masterPivotTable.stream()
-                    .filter(r -> r.getCalledMsisdn().equals(callerCalledSourceKey.getCalled())
+                    .filter(r -> r.getCallerMsisdn() != null && r.getCalledMsisdn() != null
+                            && r.getCalledMsisdn().equals(callerCalledSourceKey.getCalled())
                             && r.getCallerMsisdn().equals(callerCalledSourceKey.getCaller()))
                     .findFirst();
             matchingRow.ifPresent(m -> {
