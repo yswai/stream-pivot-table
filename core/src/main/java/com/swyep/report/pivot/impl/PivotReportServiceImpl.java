@@ -11,6 +11,13 @@ import static java.util.stream.Collectors.*;
 
 public class PivotReportServiceImpl implements PivotReportService {
 
+    @Override
+    public Set<PivotReportResultRow> getReport(Iterator<CallActivity> iterator) {
+        List<CallActivity> callActivities = new ArrayList<>();
+        iterator.forEachRemaining(callActivities::add);
+        return getReport(callActivities);
+    }
+
     public Set<PivotReportResultRow> getReport(Collection<CallActivity> inputList) {
         List<CallActivity> filtered = inputList.stream()
                 .filter(c -> c.getCalledIsTargets().length > 0 || c.getCallerIsTargets().length > 0)

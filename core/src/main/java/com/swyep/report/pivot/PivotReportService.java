@@ -4,6 +4,7 @@ import com.swyep.report.pivot.model.CallActivity;
 import com.swyep.report.pivot.model.PivotReportResultRow;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -11,6 +12,7 @@ import java.util.Set;
  */
 public interface PivotReportService {
 
+    Set<PivotReportResultRow> getReport(Iterator<CallActivity> iterator);
     Set<PivotReportResultRow> getReport(Collection<CallActivity> inputList);
 
 }
