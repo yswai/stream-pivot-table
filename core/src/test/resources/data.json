@@ -23,6 +23,8 @@
     "duration": 10,
     "callDate": 1500386615000
   },
+
+
   {
     "callerMsisdn": "3",
     "callerIsTargets": [
@@ -36,6 +38,7 @@
     "source": "mcng-A",
     "duration": 11
   },
+
   {
     "callerMsisdn": "10",
     "callerIsTargets": [],
@@ -44,6 +47,8 @@
     "source": "mcng-A",
     "duration": 11
   },
+
+
   {
     "callerMsisdn": "21",
     "callerIsTargets": [
@@ -68,6 +73,8 @@
     "duration": 12,
     "callDate": 1503065015000
   },
+
+
   {
     "callerMsisdn": "31",
     "callerIsTargets": [],
@@ -77,5 +84,33 @@
     ],
     "source": "mcng-A",
     "duration": 10
+  },
+
+
+  {
+    "callerMsisdn": "101",
+    "callerIsTargets": [
+      "Calvin"
+    ],
+    "calledMsisdn": "102",
+    "calledIsTargets": [
+      "Gavin"
+    ],
+    "source": "mcng-A",
+    "duration": 25,
+    "callDate": 1500386615000
+  },
+  {
+    "callerMsisdn": "101",
+    "callerIsTargets": [
+      "Calvin"
+    ],
+    "calledMsisdn": "102",
+    "calledIsTargets": [
+      "Gavin"
+    ],
+    "source": "mcng-B",
+    "duration": 25,
+    "callDate": 1503065015000
   }
 ]
