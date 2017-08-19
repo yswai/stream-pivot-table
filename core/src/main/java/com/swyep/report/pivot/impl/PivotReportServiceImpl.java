@@ -33,7 +33,7 @@ public class PivotReportServiceImpl implements PivotReportService {
                 .collect(groupingBy(c -> new CallerCalledSourceKey(c.getCallerMsisdn(), c.getCalledMsisdn(), c.getSource()), counting()));
 //        Set<String> sources = pivotCountingGroup.keySet().stream().map(k -> k.getSource()).distinct().collect(toSet());
         mergeResults(masterPivotTable, pivotCountingGroup);
-        return masterPivotTable;
+        return masterPivotTable.stream().sorted(Comparator.comparing(PivotReportResultRow::getDistinctCount).reversed()).collect(toSet());
     }
 
     private Set<PivotReportResultRow> getMasterPivotTable(Collection<CallActivity> callActivities, Map<CallerCalledKey, Long> masterCountingGroup) {
