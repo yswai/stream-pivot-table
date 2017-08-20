@@ -26,8 +26,8 @@ public class PivotReportServiceImpl implements PivotReportService {
         List<CallActivity> distincted = filtered.stream()
                 .collect(groupingBy(c -> new CallerCalledCallDateKey(c.getCallerMsisdn(), c.getCalledMsisdn(), c.getCallDate()), toSet()))
                 .entrySet().stream().map(e -> e.getValue().stream().findFirst().get()).collect(toList());
-        Map<CallerCalledCallDateKey, Long> masterCountingGroup = distincted.stream()
-                .collect(groupingBy(c -> new CallerCalledCallDateKey(c.getCallerMsisdn(), c.getCalledMsisdn(), c.getCallDate()), counting()));
+        Map<CallerCalledKey, Long> masterCountingGroup = distincted.stream()
+                .collect(groupingBy(c -> new CallerCalledKey(c.getCallerMsisdn(), c.getCalledMsisdn()), counting()));
         Set<PivotReportResultRow> masterPivotTable = getMasterPivotTable(filtered, masterCountingGroup);
         Map<CallerCalledSourceKey, Long> pivotCountingGroup = filtered.stream()
                 .collect(groupingBy(c -> new CallerCalledSourceKey(c.getCallerMsisdn(), c.getCalledMsisdn(), c.getSource()), counting()));
@@ -36,14 +36,14 @@ public class PivotReportServiceImpl implements PivotReportService {
         return masterPivotTable.stream().sorted(Comparator.comparing(PivotReportResultRow::getDistinctCount).reversed()).collect(toSet());
     }
 
-    private Set<PivotReportResultRow> getMasterPivotTable(Collection<CallActivity> callActivities, Map<CallerCalledCallDateKey, Long> masterCountingGroup) {
-        Map<CallerCalledCallDateKey, Set<CallActivity>> masterPivotTable = callActivities.stream()
-                .collect(groupingBy(c -> new CallerCalledCallDateKey(c.getCallerMsisdn(), c.getCalledMsisdn(), c.getCallDate()), toSet()));
+    private Set<PivotReportResultRow> getMasterPivotTable(Collection<CallActivity> callActivities, Map<CallerCalledKey, Long> masterCountingGroup) {
+        Map<CallerCalledKey, Set<CallActivity>> masterPivotTable = callActivities.stream()
+                .collect(groupingBy(c -> new CallerCalledKey(c.getCallerMsisdn(), c.getCalledMsisdn()), toSet()));
         return masterPivotTable.entrySet().stream().map(e -> {
-            CallerCalledCallDateKey key = e.getKey();
+            CallerCalledKey key = e.getKey();
             Optional<CallActivity> callActivity = e.getValue().stream().findFirst();
-            Optional<Map.Entry<CallerCalledCallDateKey, Long>> countEntry = masterCountingGroup.entrySet().stream().filter(e2 -> {
-                CallerCalledCallDateKey matchingKey = new CallerCalledCallDateKey(e2.getKey().getCaller(), e2.getKey().getCalled(), e2.getKey().getCallDate());
+            Optional<Map.Entry<CallerCalledKey, Long>> countEntry = masterCountingGroup.entrySet().stream().filter(e2 -> {
+                CallerCalledKey matchingKey = new CallerCalledKey(e2.getKey().getCaller(), e2.getKey().getCalled());
                 return matchingKey.equals(key);
             }).findFirst();
             // Transformer
@@ -77,6 +77,42 @@ public class PivotReportServiceImpl implements PivotReportService {
                 m.getPivotCountBySources().add(pivotCountBySource);
             });
         });
+    }
+
+    private static final class CallerCalledKey {
+        private String caller;
+        private String called;
+
+        public CallerCalledKey(String caller, String called) {
+            this.caller = caller;
+            this.called = called;
+        }
+
+        public String getCaller() {
+            return caller;
+        }
+
+        public String getCalled() {
+            return called;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            CallerCalledKey that = (CallerCalledKey) o;
+
+            if (getCaller() != null ? !getCaller().equals(that.getCaller()) : that.getCaller() != null) return false;
+            return getCalled() != null ? getCalled().equals(that.getCalled()) : that.getCalled() == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = getCaller() != null ? getCaller().hashCode() : 0;
+            result = 31 * result + (getCalled() != null ? getCalled().hashCode() : 0);
+            return result;
+        }
     }
 
     private static final class CallerCalledSourceKey {
@@ -155,10 +191,6 @@ public class PivotReportServiceImpl implements PivotReportService {
 
         public String getCalled() {
             return called;
-        }
-
-        public Date getCallDate() {
-            return callDate;
         }
 
         @Override
